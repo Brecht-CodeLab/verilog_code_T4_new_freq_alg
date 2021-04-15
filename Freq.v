@@ -57,7 +57,7 @@ module Freq(
     end
 
 
-    always @(clk) begin
+    always @(posedge clk) begin
         if (~nrst || ~swiptAlive) begin
             startupBuffer <= 24'h30D40;
             freqSwitchBuffer <= 24'h30D40;

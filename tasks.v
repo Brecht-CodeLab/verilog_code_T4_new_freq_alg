@@ -14,7 +14,7 @@ task UpdateFreq(inout freqAlgStarted, input [19:0] freq, output freqAlgDone, out
 endtask
 
 
-    task CheckHighestADC(input [11:0] ADC, input [19:0] freq, output [19:0] bestFreq, inout [11:0] highestADC);
+task CheckHighestADC(input [11:0] ADC, input [19:0] freq, output [19:0] bestFreq, inout [11:0] highestADC);
     if(ADC < 12'h800 && ADC > highestADC)begin
         highestADC <= ADC;
         bestFreq <= freq;

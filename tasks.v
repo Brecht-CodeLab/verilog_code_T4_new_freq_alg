@@ -1,6 +1,6 @@
 `timescale 1ps/1ps
 
-task UpdateFreq();
+task UpdateFreq(inout freqAlgStarted, input [19:0] freq, output freqAlgDone, [19:0] newFreq);
     if(freqAlgStarted == 1 && freq < 20'hAFC8)begin
         newFreq <= freq + 20'h32;
     end
@@ -14,13 +14,13 @@ task UpdateFreq();
 endtask
 
 
-task CheckHighestADC();
-    if(ADC < 12'h800 && ADC > highest)begin
-        highest <= ADC;
+    task CheckHighestADC(input [11:0] ADC, [19:0] freq, output [19:0] bestFreq, inout [11:0] highestADC);
+    if(ADC < 12'h800 && ADC > highestADC)begin
+        highestADC <= ADC;
         bestFreq <= freq;
     end
-    else if(ADC >= 12'h800 && 12'hFFF - ADC > highest)begin
-        highest <= 12'hFFF - ADC;
+    else if(ADC >= 12'h800 && 12'hFFF - ADC > highestADC)begin
+        highestADC <= 12'hFFF - ADC;
         bestFreq <= freq;
     end
 endtask

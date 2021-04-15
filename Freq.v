@@ -50,9 +50,9 @@ module Freq(
         else if (startupBuffer == 0) begin
             if (freqSwitchBuffer == 0) begin
                 freqSwitchBuffer <= 24'h30D40;
-                UpdateFreq();
+                UpdateFreq(freqAlgStarted, freq, freqAlgDone, newFreq);
             end
-            CheckHighestADC();
+            CheckHighestADC(ADC, freq, bestFreq, highestADC);
         end
         else begin
             startupBuffer <= startupBuffer - 1;

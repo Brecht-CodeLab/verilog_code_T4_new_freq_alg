@@ -52,6 +52,7 @@ module Freq(
             if (freqSwitchBuffer == 0) begin
                 freqSwitchBuffer <= 24'h30D40;
                 UpdateFreq(freqAlgStarted, freq, freqAlgDone, newFreq);
+                freqAlgStarted <= 1;
             end
             else begin
                 freqSwitchBuffer <= freqSwitchBuffer - 1;

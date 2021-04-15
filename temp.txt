@@ -1,0 +1,4 @@
+(input freqAlgStarted, input [19:0] freq, output [0:0] freqAlgDone, output [19:0] newFreq)
+(input [11:0] ADC, input [19:0] freq, output [19:0] bestFreq, inout [11:0] highestADC)
+(freqAlgStarted, freq, freqAlgDone, newFreq)
+(ADC, freq, bestFreq, highestADC)

@@ -1,22 +1,23 @@
-task UpdateFreq(input freqAlgStarted, input [19:0] freq, output freqAlgDone, output [19:0] newFreq);
-    if(freqAlgStarted == 1 && freq < 20'hAFC8)begin
+task UpdateFreq;
+    if(freqAlgStarted == 1'b1 && freq < 20'hAFC8)begin
         $display("this is the wrong one");
         newFreq <= freq + 20'h32;
     end
     else if (freq > 20'hAFC7) begin
         freqAlgDone <= 1;
         newFreq <= freq;
-        $display("this is definitally not the right one");
+        $display("this is definitely not the right one");
     end
     else begin
         newFreq <= 20'h88B8; //35kHz
+        freqAlgDone <= 0;
         $display("this is the right one");
     end
     //$display("UPDATEFREQ");
 endtask
 
 
-task CheckHighestADC(input [11:0] ADC, input [19:0] freq, output [19:0] bestFreq, inout [11:0] highestADC);
+task CheckHighestADC;
     if(ADC < 12'h800 && ADC > highestADC)begin
         highestADC <= ADC;
         bestFreq <= freq;

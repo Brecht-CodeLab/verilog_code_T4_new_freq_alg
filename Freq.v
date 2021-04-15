@@ -43,7 +43,7 @@ module Freq(
     //     end
     // endtask
 
-
+    `include "tasks.v"
 
 
     initial begin
@@ -56,7 +56,6 @@ module Freq(
         freqAlgDone = 0;
     end
 
-    `include "tasks.v"
 
     always @(clk) begin
         if (~nrst || ~swiptAlive) begin

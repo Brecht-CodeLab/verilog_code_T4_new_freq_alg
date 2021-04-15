@@ -18,7 +18,7 @@ module Freq(
     reg freqAlgStarted;
 
 
-    task UpdateFreq(inout freqAlgStarted, input [19:0] freq, output freqAlgDone, [19:0] newFreq);
+    task UpdateFreq(inout freqAlgStarted, input [19:0] freq, output freqAlgDone, output [19:0] newFreq);
         if(freqAlgStarted == 1 && freq < 20'hAFC8)begin
             newFreq <= freq + 20'h32;
         end
@@ -32,7 +32,7 @@ module Freq(
     endtask
 
 
-        task CheckHighestADC(input [11:0] ADC, [19:0] freq, output [19:0] bestFreq, inout [11:0] highestADC);
+        task CheckHighestADC(input [11:0] ADC, input [19:0] freq, output [19:0] bestFreq, inout [11:0] highestADC);
         if(ADC < 12'h800 && ADC > highestADC)begin
             highestADC <= ADC;
             bestFreq <= freq;

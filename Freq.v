@@ -10,7 +10,7 @@ module Freq(
 
     output reg [19:0] newFreq,
     output reg [19:0] bestFreq,
-    output reg freqAlgDone,
+    output reg freqAlgDone
 );
     
     reg [23:0] startupBuffer, freqSwitchBuffer;

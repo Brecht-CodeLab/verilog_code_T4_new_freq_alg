@@ -18,11 +18,11 @@ endtask
 
 
 task CheckHighestADC;
-    if(ADC < 12'h800 && ADC > highestADC)begin
+    if(ADC < 12'h800 && ADC > highestADC && freqAlgStarted)begin
         highestADC <= ADC;
         bestFreq <= freq;
     end
-    else if(ADC >= 12'h800 && 12'hFFF - ADC > highestADC)begin
+    else if(ADC >= 12'h800 && 12'hFFF - ADC > highestADC && freqAlgStarted)begin
         highestADC <= 12'hFFF - ADC;
         bestFreq <= freq;
     end

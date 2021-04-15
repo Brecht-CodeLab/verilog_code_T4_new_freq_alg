@@ -1,18 +1,16 @@
 task UpdateFreq(input freqAlgStarted, input [19:0] freq, output freqAlgDone, output [19:0] newFreq);
+    $display("UPDATEFREQ");
     if(freqAlgStarted == 1 && freq < 20'hAFC8)begin
         $display("this is the wrong one");
         newFreq <= freq + 20'h32;
-        freqAlgDone <= 0;
     end
     else if (freq > 20'hAFC7) begin
         freqAlgDone <= 1;
         newFreq <= freq;
     end
     else begin
-        freqAlgDone <= 0;
         newFreq <= 20'h88B8; //35kHz
         $display("this is the right one");
-
     end
 endtask
 

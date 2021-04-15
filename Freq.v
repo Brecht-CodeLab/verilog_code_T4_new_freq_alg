@@ -43,7 +43,7 @@ module Freq(
     //     end
     // endtask
 
-    //`include "tasks.v"
+    `include "tasks.v"
 
 
     initial begin

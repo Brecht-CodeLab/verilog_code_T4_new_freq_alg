@@ -79,6 +79,7 @@ module toplevel ();
     reg [15:0] COMMS_FLIGHT_TIME = 16'b1001100110011001;
 	wire [7:0] RECEIVED_EFF, RECEIVED_POWER_RX;
 	wire [11:0] dutyCycle;
+	wire dutyUpDownDataReady, dutyUpDownData;
 //------END PARAM & VAR------//
 
 	initial begin

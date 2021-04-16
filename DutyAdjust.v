@@ -9,7 +9,7 @@ module DutyAdjust(
     input wire write,
     input wire data,
     input wire [11:0] l,
-    output reg [11:0] dutyCycle,
+    output reg [11:0] dutyCycle
 );
     reg [19:0] cnt_pos_d = 20'h0;
 	reg [19:0] cnt_neg_d = 20'h0;

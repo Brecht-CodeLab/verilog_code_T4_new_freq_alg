@@ -12,32 +12,33 @@ endtask
 
 task ProcessIncomingData;
     case (mode)
-        00:begin //Startup & questions
+        2'b00:begin //Startup & questions
             case (type)
-                00:StartupProtocol;
-                01:StoreAnswerIfCorrectProtocol; //Store answer eff
-                10:StoreAnswerIfCorrectProtocol; //Store answer R power
-                11:PowerOptimizationProtocol;
+                2'b00:StartupProtocol;
+                2'b01:StoreAnswerIfCorrectProtocol; //Store answer eff
+                2'b10:StoreAnswerIfCorrectProtocol; //Store answer R power
+                2'b11:PowerOptimizationProtocol;
             endcase
         end
-        01:case (type)
-            00:DataSuccessfullySentAndReceivedProtocol;
-            01:DataSuccessfullySentAndReceivedProtocol;
-            10:DataSuccessfullySentAndReceivedProtocol;
-            11:DataSuccessfullySentAndReceivedProtocol;
+        2'b01:case (type)
+            2'b00:DataSuccessfullySentAndReceivedProtocol;
+            2'b01:DataSuccessfullySentAndReceivedProtocol;
+            2'b10:DataSuccessfullySentAndReceivedProtocol;
+            2'b11:DataSuccessfullySentAndReceivedProtocol;
         endcase
-        10:case (type)
-            00:DataSuccessfullySentAndReceivedProtocol;
-            01:DataSuccessfullySentAndReceivedProtocol;
-            10:DataSuccessfullySentAndReceivedProtocol;
-            11:DataSuccessfullySentAndReceivedProtocol;
+        2'b10:case (type)
+            2'b00:DataSuccessfullySentAndReceivedProtocol;
+            2'b01:DataSuccessfullySentAndReceivedProtocol;
+            2'b10:DataSuccessfullySentAndReceivedProtocol;
+            2'b11:DataSuccessfullySentAndReceivedProtocol;
         endcase
-        11:case (type)
-            00:DataSuccessfullySentAndReceivedProtocol;
-            01:DataSuccessfullySentAndReceivedProtocol;
-            10:DataSuccessfullySentAndReceivedProtocol;
-            11:DataSuccessfullySentAndReceivedProtocol;
+        2'b11:case (type)
+            2'b00:DataSuccessfullySentAndReceivedProtocol;
+            2'b01:DataSuccessfullySentAndReceivedProtocol;
+            2'b10:DataSuccessfullySentAndReceivedProtocol;
+            2'b11:DataSuccessfullySentAndReceivedProtocol;
         endcase
+        default:DataSuccessfullySentAndReceivedProtocol;
     endcase
 endtask
 
@@ -56,31 +57,31 @@ task GetDataFromZybo;
         getDataFromZybo <= 0;
         getMeanCurrent <= 0;
         case (mode)
-            00:dataFromZybo <= 16'b1010101010101010;
-            01:begin
+            2'b00:dataFromZybo <= 16'b1010101010101010;
+            2'b01:begin
                 case (type)
-                    00:dataFromZybo <= SWIPT_P_TX;
-                    01:dataFromZybo <= SWIPT_DUTY;
-                    10:dataFromZybo <= SWIPT_FREQ;
-                    11:dataFromZybo <= SWIPT_ASCII;
+                    2'b00:dataFromZybo <= SWIPT_P_TX;
+                    2'b01:dataFromZybo <= SWIPT_DUTY;
+                    2'b10:dataFromZybo <= SWIPT_FREQ;
+                    2'b11:dataFromZybo <= SWIPT_ASCII;
                     default:dataFromZybo <= 16'b1010101010101010;
                 endcase
             end
-            10:begin
+            2'b10:begin
                 case (type)
-                    00:dataFromZybo <= ANC_MAX_HEIGHT;
-                    01:dataFromZybo <= ANC_MIN_HEIGHT;
-                    10:dataFromZybo <= 16'b1010101010101010;
-                    11:dataFromZybo <= 16'b1010101010101010;
+                    2'b00:dataFromZybo <= ANC_MAX_HEIGHT;
+                    2'b01:dataFromZybo <= ANC_MIN_HEIGHT;
+                    2'b10:dataFromZybo <= 16'b1010101010101010;
+                    2'b11:dataFromZybo <= 16'b1010101010101010;
                     default:dataFromZybo <= 16'b1010101010101010;
                 endcase
             end
-            11:begin
+            2'b11:begin
                 case (type)
-                    00:dataFromZybo <= COMMS_TRAJECT;
-                    01:dataFromZybo <= COMMS_QR_CODES;
-                    10:dataFromZybo <= COMMS_FLIGHT_TIME;
-                    11:dataFromZybo <= 16'b1010101010101010;
+                    2'b00:dataFromZybo <= COMMS_TRAJECT;
+                    2'b01:dataFromZybo <= COMMS_QR_CODES;
+                    2'b10:dataFromZybo <= COMMS_FLIGHT_TIME;
+                    2'b11:dataFromZybo <= 16'b1010101010101010;
                     default:dataFromZybo <= 16'b1010101010101010;
                 endcase
             end

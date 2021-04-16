@@ -48,15 +48,16 @@ module AnalyseData (
         end
 
         case (mode)
-            00:case (type)
-                00:DataReceivedConfirmation;
-                01:AnswerToQuestion;
-                10:AnswerToQuestion;
-                11:DataReceivedConfirmation;
+            2'b00:case (type)
+                2'b00:DataReceivedConfirmation;
+                2'b01:AnswerToQuestion;
+                2'b10:AnswerToQuestion;
+                2'b11:DataReceivedConfirmation;
             endcase
-            01:DataReceivedConfirmation;
-            10:DataReceivedConfirmation;
-            11:DataReceivedConfirmation;
+            2'b01:DataReceivedConfirmation;
+            2'b10:DataReceivedConfirmation;
+            2'b11:DataReceivedConfirmation;
+            default:DataReceivedConfirmation;
         endcase
     end
 

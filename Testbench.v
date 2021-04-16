@@ -107,8 +107,8 @@ module toplevel ();
 		end
 		else begin
 			case (program)
-				00: program <= 2'b01;
-				01:begin //Freq optimization
+				2'b00: program <= 2'b01;
+				2'b01:begin //Freq optimization
 					$display("this is freq zone");
 					if(~freqAlgDone)begin
 						freq <= newFreq;
@@ -118,7 +118,7 @@ module toplevel ();
 						program <= 2'b10;
 					end
 				end
-				10:begin //Measure Current
+				2'b10:begin //Measure Current
 					$display("we are now in the measurement zone");
 					if(measurementBuffer == 0)begin
 						program <= 2'b11;
@@ -137,12 +137,12 @@ module toplevel ();
 						$display("this should be the first one");
 					end
 				end
-				11:begin //Data & Power Optimization
+				2'b11:begin //Data & Power Optimization
 					$display("this is data zone");
 					measure <= getMeanCurrentData;
 					if(dutyUpDownDataReady)begin
 						case (dutyUpDownData)
-							0:begin
+							1'b0:begin
 								if((l+l/10)<12'h1F4)begin
 									l <= l+(l/10);
 								end
@@ -150,7 +150,7 @@ module toplevel ();
 									l <= 12'h1F4;
 								end
 							end
-							1:begin
+							1'b1:begin
 								if((l-l/10)>12'h32)begin
 									l <= l-(l/10);
 								end

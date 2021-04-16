@@ -56,11 +56,11 @@ endtask
 task StoreAnswerIfCorrectProtocol;
     if(^dataIn == checkSumBit)begin
         case (type)
-            01:begin
+            2'b01:begin
                 RECEIVED_EFF <= dataIn;
                 type <= 2'b10;
             end
-            10:begin
+            2'b10:begin
                 RECEIVED_POWER_RX <= dataIn;
                 type <= 2'b00;
                 mode <= 2'b01;

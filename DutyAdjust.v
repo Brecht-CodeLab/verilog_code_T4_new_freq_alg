@@ -34,13 +34,13 @@ module DutyAdjust(
         end
         else begin
             case (program)
-                00:dutyCycle<=l;
-                01:dutyCycle<=l;
-                10:dutyCycle<=l;
-                11:begin
+                2'b00:dutyCycle<=l;
+                2'b01:dutyCycle<=l;
+                2'b10:dutyCycle<=l;
+                2'b11:begin
                     if(write && ~read)begin
                         case (data)
-                            0:begin
+                            1'b0:begin
 								if(cnt_pos_d == 20'h0)begin
                                     if((l+l/2) < 20'h1F4)begin
                                         dutyCycle <= l+l/2;
@@ -61,7 +61,7 @@ module DutyAdjust(
                                 end
                                 
 							end
-                            1:begin
+                            1'b1:begin
                                 if(cnt_neg_d == 20'h0)begin
                                     if(20'h1F4 - l < l/5)begin
                                         dutyCycle <= 2*l - 20'h1F4;

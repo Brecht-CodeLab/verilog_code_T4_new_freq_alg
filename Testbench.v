@@ -46,74 +46,119 @@ module toplevel ();
 	wire ADC10;
 	wire ADC11;
 
+	///Program variable
+	reg controlledByComms = 0;
+	reg freqFromComms, dutyFromComms;
+	reg [1:0] program = 2'b00;
+
 	///Frequency Default
-	reg [19:0] freq = 20'h9C40; //Default freq is 40kHz
+	reg [19:0] startFreq = 20'h88B8; //Default freq is 35kHz
+	reg [19:0] freq;
 	reg [11:0] l = 12'hC8;
-	reg freqAlgGo = 0;
 	wire freqAlgDone;
-	wire [19:0] newFreq, bestFreq;	
-//------END PARAM & VAR------//	
+	wire [19:0] newFreq, bestFreq;
+
+	///Meancurrent measurement
+	reg measure;
+	reg [19:0] measurementBuffer;
+	wire [11:0] meanCurrent;
+	wire getMeanCurrentData;
+//------END PARAM & VAR------//
+
+	initial begin
+		freq = startFreq;
+		measurementBuffer = 20'hF4240;
+	end
 
 	always @(posedge clk) begin
-		if(swiptAlive && nrst && ~freqAlgDone)begin
-			freqAlgGo <= 1;
-			freq <= newFreq;
+		if(~nrst || ~swiptAlive)begin
+			program <= 2'b00;
+			measurementBuffer <= 20'hF4240;
+			freq <= startFreq;
+			l <= 12'hC8;			
 		end
-		else if (swiptAlive && nrst && freqAlgDone) begin
-			freqAlgGo <= 0;
-			freq <= bestFreq;
+		else if(controlledByComms)begin
+			measurementBuffer <= 20'hF4240;
+			freq <= freqFromComms;
+			l <= dutyFromComms;
+			program <= 2'b00;
 		end
 		else begin
-			freqAlgGo <= 0;
-			freq <= 20'h9C40;
+			case (program)
+				00: program <= 2'b01;
+				01:begin //Freq optimization
+					if(~freqAlgDone)begin
+						freq <= newFreq;
+					end
+					else begin
+						freq <= bestFreq;
+						program <= 2'b10;
+					end
+				end
+				10:begin //Measure Current
+					if(measurementBuffer == 0)begin
+						program <= 2'b11;
+						measurementBuffer <= 20'hF4240;
+						measure <= 0;
+					end
+					else begin
+						measurementBuffer <= measurementBuffer - 1;
+						measure <= 1;
+					end
+				end
+				11:begin //Data & Power Optimization
+					measure <= getMeanCurrentData;
+				end
+				default:
+			endcase
 		end
 	end
 	
 //------BEGIN MODULES------//
 	//set swipt alive
 	Heartbeat inst_heartbeat (
-			.clk (clk),
-			.nrst (nrst),
-			.swiptONHeartbeat (swiptONHeartbeat),
-			.swipt (swiptAlive)
-			);
+		.clk (clk),
+		.nrst (nrst),
+		.swiptONHeartbeat (swiptONHeartbeat),
+		.swipt (swiptAlive)
+	);
 
 	SwiptOut inst_swiptout (
-			.clk (clk),
-			.nrst (nrst),
-			.freq (freq),
-			.l (l),
-			.SWIPT_OUT0 (SWIPT_OUT0),
-			.SWIPT_OUT1 (SWIPT_OUT1),
-			.SWIPT_OUT2 (SWIPT_OUT2),
-			.SWIPT_OUT3 (SWIPT_OUT3)
-			);
+		.clk (clk),
+		.nrst (nrst),
+		.freq (freq),
+		.l (l),
+		.SWIPT_OUT0 (SWIPT_OUT0),
+		.SWIPT_OUT1 (SWIPT_OUT1),
+		.SWIPT_OUT2 (SWIPT_OUT2),
+		.SWIPT_OUT3 (SWIPT_OUT3)
+	);
 
 	
 	ANALOG_NETWORK inst_ANALOG_NETWORK (
-			.SWIPT_OUT0	(SWIPT_OUT0),
-			.SWIPT_OUT1	(SWIPT_OUT1),
-			.SWIPT_OUT2 (SWIPT_OUT2),
-			.SWIPT_OUT3 (SWIPT_OUT3),
-			.ACOUT0 (ADC11),
-			.ACOUT1 (ADC10),
-			.ACOUT2 (ADC9),
-			.ACOUT3 (ADC8),
-			.ACOUT4 (ADC7),
-			.ACOUT5 (ADC6),
-			.ACOUT6 (ADC5),
-			.ACOUT7 (ADC4),
-			.ACOUT8 (ADC3),
-			.ACOUT9 (ADC2),
-			.ACOUT10 (ADC1),
-			.ACOUT11 (ADC0)
-			);
+		.SWIPT_OUT0	(SWIPT_OUT0),
+		.SWIPT_OUT1	(SWIPT_OUT1),
+		.SWIPT_OUT2 (SWIPT_OUT2),
+		.SWIPT_OUT3 (SWIPT_OUT3),
+		.ACOUT0 (ADC11),
+		.ACOUT1 (ADC10),
+		.ACOUT2 (ADC9),
+		.ACOUT3 (ADC8),
+		.ACOUT4 (ADC7),
+		.ACOUT5 (ADC6),
+		.ACOUT6 (ADC5),
+		.ACOUT7 (ADC4),
+		.ACOUT8 (ADC3),
+		.ACOUT9 (ADC2),
+		.ACOUT10 (ADC1),
+		.ACOUT11 (ADC0)
+	);
 
 	Freq inst_freq(
 		.clk(clk),
 		.nrst(nrst),
 		.swiptAlive(swiptAlive),
-		.freqAlgGo(freqAlgGo),
+		.program(program),
 		.ADC(ADC_in),
 		.freq(freq),
 		.newFreq(newFreq),
@@ -121,7 +166,29 @@ module toplevel ();
 		.freqAlgDone(freqAlgDone)
 	);
 
+	GetMeanCurrent inst_getmeancurrent(
+		.clk(clk),
+		.nrst(nrst),
+		.swiptAlive(swiptAlive),
+		.measure(measure),
+		.ADC(ADC_in),
+		.mean_curr(meanCurrent)
+	);
 
+	Data inst_data(
+		.clk(clk),
+		.nrst(nrst),
+		.swiptAlive(swiptAlive),
+		.program(program),
+		.ADC(ADC_in),
+		.meanCurrent(meanCurrent),
+		.read(read),
+		.write(write),
+		.dout(dout),
+		.l_rdy(l_rdy_data),
+		.l_up_down(l_up_down_data),
+		.getMeanCurrent(getMeanCurrentData)
+	);
 //------END MODULES------//
 
 //------BEGIN ASSIGNMENT------//

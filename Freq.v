@@ -4,7 +4,7 @@ module Freq(
     input wire clk,
     input wire nrst,
     input wire swiptAlive,
-    input wire freqAlgGo,
+    input wire [1:0] program,
     input wire [11:0] ADC,
     input wire [19:0] freq,
 
@@ -20,7 +20,7 @@ module Freq(
 
     initial begin
         startupBuffer = 24'h30D40; //2ms
-        freqSwitchBuffer = 24'h30D40; //2ms
+        freqSwitchBuffer = 24'h186A0; //1ms
         newFreq = freq;
         bestFreq = freq;
         highestADC = 12'h0;
@@ -33,16 +33,16 @@ module Freq(
     always @(posedge clk) begin
         if (~nrst || ~swiptAlive) begin
             startupBuffer <= 24'h30D40;
-            freqSwitchBuffer <= 24'h30D40;
+            freqSwitchBuffer <= 24'h186A0;
             newFreq <= freq;
             bestFreq <= freq;
             highestADC <= 12'h0;
             freqAlgStarted <= 1'b0;
             freqAlgDone <= 1'b0;
         end
-        else if (~freqAlgGo) begin
+        else if (program != 2'b01) begin
             startupBuffer <= 24'h30D40;
-            freqSwitchBuffer <= 24'h30D40;
+            freqSwitchBuffer <= 24'h186A0;
             newFreq <= freq;
             bestFreq <= freq;
             highestADC <= 12'h0;
@@ -50,7 +50,7 @@ module Freq(
         end
         else if (startupBuffer == 0) begin
             if (freqSwitchBuffer == 0) begin
-                freqSwitchBuffer <= 24'h30D40;
+                freqSwitchBuffer <= 24'h186A0;
                 UpdateFreq;
                 freqAlgStarted <= 1'b1;
             end

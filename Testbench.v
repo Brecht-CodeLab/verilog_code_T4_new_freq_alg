@@ -76,6 +76,7 @@ module toplevel ();
     reg [15:0] COMMS_TRAJECT = 16'b1001100110011001;
     reg [15:0] COMMS_QR_CODES = 16'b1001100110011001;
     reg [15:0] COMMS_FLIGHT_TIME = 16'b1001100110011001;
+	wire [7:0] RECEIVED_EFF, RECEIVED_POWER_RX;
 //------END PARAM & VAR------//
 
 	initial begin
@@ -205,6 +206,8 @@ module toplevel ();
 		.COMMS_TRAJECT(COMMS_TRAJECT),
 		.COMMS_QR_CODES(COMMS_QR_CODES),
 		.COMMS_FLIGHT_TIME(COMMS_FLIGHT_TIME),
+		.RECEIVED_EFF(RECEIVED_EFF),
+		.RECEIVED_POWER_RX(RECEIVED_POWER_RX),
 		.read(read),
 		.write(write),
 		.dout(dout),

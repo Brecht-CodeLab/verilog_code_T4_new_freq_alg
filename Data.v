@@ -16,6 +16,8 @@ module Data (
     input wire [15:0] COMMS_TRAJECT,
     input wire [15:0] COMMS_QR_CODES,
     input wire [15:0] COMMS_FLIGHT_TIME,
+    output reg [7:0] RECEIVED_EFF,
+    output reg [7:0] RECEIVED_POWER_RX,
 	output read,
 	output write,
 	output dout,
@@ -27,7 +29,7 @@ module Data (
     wire din, dataInReady, checkSumBit;
     wire [7:0] dataIn, sumChecker;
 
-    reg write, read, getDataFromZybo, dout, readDataIn;
+    reg getDataFromZybo, readDataIn;
     reg [1:0] mode, type;
     reg [7:0]streamCounter;
     reg [15:0] dataFromZybo;

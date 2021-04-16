@@ -1,9 +1,9 @@
 task UpdateFreq;
-    if(freqAlgStarted == 1'b1 && freq < 20'hA7F8)begin
+    if(freqAlgStarted == 1'b1 && freq < 20'hA410)begin
         $display("frequency upgrade");
         newFreq <= freq + 20'h32;
     end
-    else if (freq > 20'hA7F7) begin
+    else if (freq > 20'hA40F) begin
         freqAlgDone <= 1;
         newFreq <= freq;
         $display("we're done");

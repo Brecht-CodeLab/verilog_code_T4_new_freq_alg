@@ -54,7 +54,7 @@ module toplevel ();
 	reg [1:0] program = 2'b00;
 
 	///Frequency Default
-	reg [19:0] startFreq = 20'h8CA0; //Default freq is 36kHz
+	reg [19:0] startFreq = 20'h9470; //Default freq is 36kHz
 	reg [19:0] freq;
 	reg [11:0] l = 12'hC8; //Default duty
 	wire freqAlgDone;
@@ -109,6 +109,7 @@ module toplevel ();
 			case (program)
 				00: program <= 2'b01;
 				01:begin //Freq optimization
+					$display("this is freq zone");
 					if(~freqAlgDone)begin
 						freq <= newFreq;
 					end
@@ -118,21 +119,26 @@ module toplevel ();
 					end
 				end
 				10:begin //Measure Current
+					$display("we are now in the measurement zone");
 					if(measurementBuffer == 0)begin
 						program <= 2'b11;
 						measurementBuffer <= 23'h6ACFC0;
 						measure <= 0;
+						$display("this should be the last one");
 					end
 					else if(measurementBuffer < 23'h1E8480) begin
 						measurementBuffer <= measurementBuffer - 1;
 						measure <= 1;
+						$display("this should be the middle one");
 					end
 					else begin
 						measurementBuffer <= measurementBuffer - 1;
 						measure <= 0;
+						$display("this should be the first one");
 					end
 				end
 				11:begin //Data & Power Optimization
+					$display("this is data zone");
 					measure <= getMeanCurrentData;
 					if(dutyUpDownDataReady)begin
 						case (dutyUpDownData)
@@ -155,6 +161,7 @@ module toplevel ();
 						endcase
 					end
 				end
+				default:program<=2'b00;
 			endcase
 		end
 	end

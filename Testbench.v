@@ -56,7 +56,7 @@ module toplevel ();
 	///Frequency Default
 	reg [19:0] startFreq = 20'h88B8; //Default freq is 35kHz
 	reg [19:0] freq;
-	reg [11:0] l = 12'hC8;
+	reg [11:0] l = 12'hC8; //Default duty
 	wire freqAlgDone;
 	wire [19:0] newFreq, bestFreq;
 
@@ -67,6 +67,7 @@ module toplevel ();
 	wire getMeanCurrentData;
 
 	///Data
+	wire read, write, dout;
 	reg [15:0] SWIPT_P_TX = 16'b1001100110011001;
     reg [15:0] SWIPT_DUTY = 16'b1001100110011001;
     reg [15:0] SWIPT_FREQ = 16'b1001100110011001;
@@ -77,6 +78,7 @@ module toplevel ();
     reg [15:0] COMMS_QR_CODES = 16'b1001100110011001;
     reg [15:0] COMMS_FLIGHT_TIME = 16'b1001100110011001;
 	wire [7:0] RECEIVED_EFF, RECEIVED_POWER_RX;
+	wire [11:0] dutyCycle;
 //------END PARAM & VAR------//
 
 	initial begin
@@ -124,6 +126,26 @@ module toplevel ();
 				end
 				11:begin //Data & Power Optimization
 					measure <= getMeanCurrentData;
+					if(dutyUpDownDataReady)begin
+						case (dutyUpDownData)
+							0:begin
+								if((l+l/10)<12'h1F4)begin
+									l <= l+(l/10);
+								end
+								else begin
+									l <= 12'h1F4;
+								end
+							end
+							1:begin
+								if((l-l/10)>12'h32)begin
+									l <= l-(l/10);
+								end
+								else begin
+									l <= 12'h32;
+								end
+							end
+						endcase
+					end
 				end
 			endcase
 		end
@@ -142,7 +164,7 @@ module toplevel ();
 		.clk (clk),
 		.nrst (nrst),
 		.freq (freq),
-		.l (l),
+		.l (dutyCycle),
 		.SWIPT_OUT0 (SWIPT_OUT0),
 		.SWIPT_OUT1 (SWIPT_OUT1),
 		.SWIPT_OUT2 (SWIPT_OUT2),
@@ -211,9 +233,21 @@ module toplevel ();
 		.read(read),
 		.write(write),
 		.dout(dout),
-		.l_rdy(l_rdy_data),
-		.l_up_down(l_up_down_data),
+		.l_rdy(dutyUpDownDataReady),
+		.l_up_down(dutyUpDownData),
 		.getMeanCurrent(getMeanCurrentData)
+	);
+
+	DutyAdjust inst_dutyadjust(
+		.clk(clk),
+		.nrst(nrst),
+		.swiptAlive(swiptAlive),
+		.program(program),
+		.read(read),
+		.write(write),
+		.data(dout),
+		.l(l),
+		.dutyCycle(dutyCycle)
 	);
 //------END MODULES------//
 

@@ -109,7 +109,6 @@ module toplevel ();
 				11:begin //Data & Power Optimization
 					measure <= getMeanCurrentData;
 				end
-				default:
 			endcase
 		end
 	end

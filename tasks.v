@@ -1,11 +1,11 @@
 `include "protocols.v"
 
 task UpdateFreq;
-    if(freqAlgStarted == 1'b1 && freq < 20'hAFC8)begin
+    if(freqAlgStarted == 1'b1 && freq < 20'hA7F8)begin
         $display("frequency upgrade");
         newFreq <= freq + 20'h32;
     end
-    else if (freq > 20'hAFC7) begin
+    else if (freq > 20'hA7F7) begin
         freqAlgDone <= 1;
         newFreq <= freq;
         $display("we're done");
@@ -89,7 +89,6 @@ task ProcessIncomingData;
             10:DataSuccessfullySentAndReceivedProtocol;
             11:DataSuccessfullySentAndReceivedProtocol;
         endcase
-        default:
     endcase
 endtask
 

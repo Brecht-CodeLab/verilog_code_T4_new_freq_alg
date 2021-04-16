@@ -58,7 +58,6 @@ module UnderstandData (
             01:DataReceivedConfirmation;
             10:DataReceivedConfirmation;
             11:DataReceivedConfirmation;
-            default:
         endcase
     end
 

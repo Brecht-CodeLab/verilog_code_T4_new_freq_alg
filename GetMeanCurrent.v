@@ -16,7 +16,7 @@ module GetMeanCurrent (
 	reg [11:0] highest = 20'h0;
 	reg [11:0] mean_curr_reg = 12'h0;
 	
-	`include "tasks.v"
+	`include "taskGetMeanCurrent.v"
 
 	always @(posedge clk)begin
 		if(~nrst || ~swiptAlive)begin

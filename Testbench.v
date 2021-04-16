@@ -48,7 +48,8 @@ module toplevel ();
 
 	///Program variable
 	reg controlledByComms = 0;
-	reg freqFromComms, dutyFromComms;
+	reg [19:0] freqFromComms;
+	reg [11:0] dutyFromComms;
 	reg [1:0] program = 2'b00;
 
 	///Frequency Default
@@ -68,6 +69,8 @@ module toplevel ();
 	initial begin
 		freq = startFreq;
 		measurementBuffer = 20'hF4240;
+		freqFromComms <= 0;
+		dutyFromComms <= 0;
 	end
 
 	always @(posedge clk) begin

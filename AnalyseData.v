@@ -27,7 +27,7 @@ module UnderstandData (
         checkSumBit = 0;
     end
     
-    `include "tasks.v"
+    `include "taskAnalyseData.v"
 
     always @(posedge clk) begin
         if(~nrst || ~swiptAlive || program != 2'b11 || ~readDataIn)begin
@@ -53,7 +53,6 @@ module UnderstandData (
                 01:AnswerToQuestion;
                 10:AnswerToQuestion;
                 11:DataReceivedConfirmation;
-                default:
             endcase
             01:DataReceivedConfirmation;
             10:DataReceivedConfirmation;

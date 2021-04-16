@@ -12,7 +12,7 @@ module Data (
 	output dout,
 	output reg l_rdy,
 	output reg l_up_down,
-	output reg getMeanCurrent,
+	output reg getMeanCurrent
 	);
     
     wire din, dataInReady, checkSumBit;
@@ -26,7 +26,8 @@ module Data (
 	reg [23:0] readBuffer; //2 500 000 clk cycli == 25ms wait time for answer
     reg [35:0] dataStream;
 
-    `include "tasks.v"
+    `include "protocols.v"
+    `include "taskData.v"
 
     initial begin
         mode = 2'b00;

@@ -14,6 +14,10 @@ module DutyAdjust(
     reg [19:0] cnt_pos_d = 20'h0;
 	reg [19:0] cnt_neg_d = 20'h0;
 
+    initial begin
+        dutyCycle = l;
+    end
+
 	always @(posedge data)begin
 		cnt_pos_d <= 20'h3000;
 		cnt_neg_d <= 0;
@@ -26,7 +30,7 @@ module DutyAdjust(
 
     always @(posedge clk) begin
         if(~nrst || ~swiptAlive)begin
-            
+            dutyCycle<=l;
         end
         else begin
             case (program)

@@ -8,7 +8,7 @@ module ReadData (
     input wire readDataIn,
 	input wire [11:0] ADC,
 	input wire [11:0] mean_def,
-    input reg din
+    output reg din
 	);
 
     reg [11:0] lowest;
@@ -19,7 +19,7 @@ module ReadData (
         clk_cycles = 20'h9C40;
     end
 
-    always @(posedge clk)) begin
+    always @(posedge clk) begin
         if(~nrst || program != 2'b11 || ~readDataIn)begin
 			clk_cycles <= 20'h9C40;
 			lowest <= 0;

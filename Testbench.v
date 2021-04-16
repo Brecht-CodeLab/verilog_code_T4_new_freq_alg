@@ -62,7 +62,7 @@ module toplevel ();
 
 	///Meancurrent measurement
 	reg measure;
-	reg [19:0] measurementBuffer;
+	reg [23:0] measurementBuffer;
 	wire [11:0] meanCurrent;
 	wire getMeanCurrentData;
 
@@ -84,23 +84,26 @@ module toplevel ();
 
 	initial begin
 		freq = startFreq;
-		measurementBuffer = 20'hF4240;
+		measurementBuffer = 23'h6ACFC0;
 		freqFromComms <= 0;
 		dutyFromComms <= 0;
+		measure <= 0;
 	end
 
 	always @(posedge clk) begin
 		if(~nrst || ~swiptAlive)begin
 			program <= 2'b00;
-			measurementBuffer <= 20'hF4240;
+			measurementBuffer <= 23'h6ACFC0;
 			freq <= startFreq;
-			l <= 12'hC8;			
+			l <= 12'hC8;
+			measure <= 0;		
 		end
 		else if(controlledByComms)begin
-			measurementBuffer <= 20'hF4240;
+			measurementBuffer <= 23'h6ACFC0;
 			freq <= freqFromComms;
 			l <= dutyFromComms;
 			program <= 2'b00;
+			measure <= 0;
 		end
 		else begin
 			case (program)
@@ -117,12 +120,16 @@ module toplevel ();
 				10:begin //Measure Current
 					if(measurementBuffer == 0)begin
 						program <= 2'b11;
-						measurementBuffer <= 20'hF4240;
+						measurementBuffer <= 23'h6ACFC0;
 						measure <= 0;
+					end
+					else if(measurementBuffer < 23'h1E8480) begin
+						measurementBuffer <= measurementBuffer - 1;
+						measure <= 1;
 					end
 					else begin
 						measurementBuffer <= measurementBuffer - 1;
-						measure <= 1;
+						measure <= 0;
 					end
 				end
 				11:begin //Data & Power Optimization

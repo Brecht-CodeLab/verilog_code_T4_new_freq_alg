@@ -18,9 +18,9 @@ module Data (
     input wire [15:0] COMMS_FLIGHT_TIME,
     output reg [7:0] RECEIVED_EFF,
     output reg [7:0] RECEIVED_POWER_RX,
-	output read,
-	output write,
-	output dout,
+	output reg read,
+	output reg write,
+	output reg dout,
 	output reg l_rdy,
 	output reg l_up_down,
 	output reg getMeanCurrent

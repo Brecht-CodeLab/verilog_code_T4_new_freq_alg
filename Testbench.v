@@ -54,7 +54,7 @@ module toplevel ();
 	reg [1:0] program = 2'b00;
 
 	///Frequency Default
-	reg [19:0] startFreq = 20'h88B8; //Default freq is 35kHz
+	reg [19:0] startFreq = 20'h8CA0; //Default freq is 36kHz
 	reg [19:0] freq;
 	reg [11:0] l = 12'hC8; //Default duty
 	wire freqAlgDone;

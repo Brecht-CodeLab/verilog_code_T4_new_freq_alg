@@ -14,6 +14,7 @@ module toplevel ();
 	wire SWIPT_OUT1;
 	wire SWIPT_OUT2;
 	wire SWIPT_OUT3;
+	
 	//--GIVEN INPUTS AND OUTPUTS (for now they are not perfectly right)--//
 
 	//--DEFINITION OF CLK, NRST AND SWIPTONHEARTBEAT--//
@@ -64,6 +65,17 @@ module toplevel ();
 	reg [19:0] measurementBuffer;
 	wire [11:0] meanCurrent;
 	wire getMeanCurrentData;
+
+	///Data
+	reg [15:0] SWIPT_P_TX = 16'b1001100110011001;
+    reg [15:0] SWIPT_DUTY = 16'b1001100110011001;
+    reg [15:0] SWIPT_FREQ = 16'b1001100110011001;
+    reg [15:0] SWIPT_ASCII = 16'b1001100110011001;
+    reg [15:0] ANC_MAX_HEIGHT = 16'b1001100110011001;
+    reg [15:0] ANC_MIN_HEIGHT = 16'b1001100110011001;
+    reg [15:0] COMMS_TRAJECT = 16'b1001100110011001;
+    reg [15:0] COMMS_QR_CODES = 16'b1001100110011001;
+    reg [15:0] COMMS_FLIGHT_TIME = 16'b1001100110011001;
 //------END PARAM & VAR------//
 
 	initial begin
@@ -184,6 +196,15 @@ module toplevel ();
 		.program(program),
 		.ADC(ADC_in),
 		.meanCurrent(meanCurrent),
+		.SWIPT_P_TX(SWIPT_P_TX),
+		.SWIPT_DUTY(SWIPT_DUTY),
+		.SWIPT_FREQ(SWIPT_FREQ),
+		.SWIPT_ASCII(SWIPT_ASCII),
+		.ANC_MAX_HEIGHT(ANC_MAX_HEIGHT),
+		.ANC_MIN_HEIGHT(ANC_MIN_HEIGHT),
+		.COMMS_TRAJECT(COMMS_TRAJECT),
+		.COMMS_QR_CODES(COMMS_QR_CODES),
+		.COMMS_FLIGHT_TIME(COMMS_FLIGHT_TIME),
 		.read(read),
 		.write(write),
 		.dout(dout),

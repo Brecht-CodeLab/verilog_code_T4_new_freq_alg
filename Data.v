@@ -7,6 +7,15 @@ module Data (
     input wire [1:0] program,
 	input wire [11:0] ADC,
 	input wire [11:0] meanCurrent,
+    input wire [15:0] SWIPT_P_TX,
+    input wire [15:0] SWIPT_DUTY,
+    input wire [15:0] SWIPT_FREQ,
+    input wire [15:0] SWIPT_ASCII,
+    input wire [15:0] ANC_MAX_HEIGHT,
+    input wire [15:0] ANC_MIN_HEIGHT,
+    input wire [15:0] COMMS_TRAJECT,
+    input wire [15:0] COMMS_QR_CODES,
+    input wire [15:0] COMMS_FLIGHT_TIME,
 	output read,
 	output write,
 	output dout,
@@ -20,6 +29,7 @@ module Data (
 
     reg write, read, getDataFromZybo, dout, readDataIn;
     reg [1:0] mode, type;
+    reg [7:0]streamCounter;
     reg [15:0] dataFromZybo;
 	reg [19:0] writeBuffer, blindBuffer, meanCurrentBuffer;
     reg [19:0] writeBuffer_default = 20'h30D40;
@@ -35,6 +45,7 @@ module Data (
         write = 0;
         read = 0;
         dataStream = 36'b0;
+        streamCounter = 8'h23;
         getMeanCurrent = 0;
         dout = 0;
         writeBuffer = 20'h30D40;
@@ -66,8 +77,8 @@ module Data (
             GetDataFromZybo;
         end
         else if(write && writeBuffer == 0)begin
-            datastream <= {6'b101010, mode, type, dataFromZybo, ^dataFromZybo, 4'b0101};
-            dout <= datastream[streamCounter];
+            dataStream <= {6'b101010, mode, type, dataFromZybo, ^dataFromZybo, 4'b0101};
+            dout <= dataStream[streamCounter];
             writeBuffer <= writeBuffer_default;
             getMeanCurrent <= 0;
 			NextBitWrite;

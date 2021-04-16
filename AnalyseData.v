@@ -1,6 +1,6 @@
 `timescale 1ps/1ps
 
-module UnderstandData (
+module AnalyseData (
 	input wire clk,
 	input wire nrst,
     input wire swiptAlive,

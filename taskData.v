@@ -45,7 +45,7 @@ endtask
 
 task GetDataFromZybo;
     if(meanCurrentBuffer == 0 && getMeanCurrent)begin
-        meanCurrentBuffer <= 20'hF4240;
+        meanCurrentBuffer <= 24'h1E8480;
         getMeanCurrent <= 0;
         getDataFromZybo <= 1;
         write <= 0;

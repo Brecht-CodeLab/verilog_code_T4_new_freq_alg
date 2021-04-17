@@ -1,5 +1,5 @@
 task StartupProtocol;
-    if (sumChecker == 8'b11) begin
+    if (sumChecker > 8'b10) begin
         //Succes
         type <= 11;
     end

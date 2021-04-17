@@ -17,12 +17,14 @@ module ReadData (
     initial begin
         lowest = 0;
         clk_cycles = 20'h9C40;
+		din = 0;
     end
 
     always @(posedge clk) begin
         if(~nrst || program != 2'b11 || ~readDataIn)begin
 			clk_cycles <= 20'h9C40;
 			lowest <= 0;
+			din <= 0;
 		end
 		else begin
 			if(clk_cycles == 20'h0)begin

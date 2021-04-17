@@ -33,9 +33,9 @@ module Data (
     reg [1:0] mode, type;
     reg [7:0]streamCounter;
     reg [15:0] dataFromZybo;
-	reg [19:0] writeBuffer, meanCurrentBuffer;
+	reg [19:0] writeBuffer;
     reg [19:0] writeBuffer_default = 20'h30D40;
-	reg [23:0] readBuffer, blindBuffer; //2 500 000 clk cycli == 25ms wait time for answer
+	reg [23:0] readBuffer, blindBuffer, meanCurrentBuffer; //2 500 000 clk cycli == 25ms wait time for answer
     reg [35:0] dataStream;
 
     `include "protocols.v"
@@ -50,10 +50,12 @@ module Data (
         streamCounter = 8'h23;
         getMeanCurrent = 0;
         dout = 0;
+        l_rdy = 0;
+        l_up_down = 0;
         writeBuffer = 20'h30D40;
-        readBuffer = 24'h989680;
-        blindBuffer = 24'h1E8480;
-        meanCurrentBuffer = 20'hF4240;
+        readBuffer = 24'hBEBC20;
+        blindBuffer = 24'h2625A0;
+        meanCurrentBuffer = 24'h1E8480;
         readDataIn = 0;
         GetDataFromZybo;
     end
@@ -67,9 +69,12 @@ module Data (
             write <= 0;
             read <= 0;
             streamCounter <= 8'h23;
+            meanCurrentBuffer <= 24'h1E8480;
             getMeanCurrent <= 0;
             dout <= 0;
-            blindBuffer <= 24'h1E8480;
+            blindBuffer <= 24'h2625A0;
+            l_rdy <= 0;
+            l_up_down <= 0;
         end
         else if(getDataFromZybo) begin
             readDataIn <= 0;
@@ -80,20 +85,21 @@ module Data (
         end
         else if(write && writeBuffer == 0)begin
             dataStream <= {6'b101010, ~mode[1], mode[1], ~mode[0], mode[0], ~type[1], type[1], ~type[0], type[0], dataFromZybo, ~^dataFromZybo, ^dataFromZybo, 4'b0101};
-            dout <= dataStream[streamCounter];
             writeBuffer <= writeBuffer_default;
             getMeanCurrent <= 0;
 			NextBitWrite;
         end
         else if(write)begin
+            dataStream <= {6'b101010, ~mode[1], mode[1], ~mode[0], mode[0], ~type[1], type[1], ~type[0], type[0], dataFromZybo, ~^dataFromZybo, ^dataFromZybo, 4'b0101};
+            dout <= dataStream[streamCounter];
             writeBuffer <= writeBuffer - 1;
             getMeanCurrent <= 0;
         end
         else if(read && readBuffer == 0)begin
             readDataIn <= 0;
             getDataFromZybo <= 1;
-            blindBuffer <= 24'h1E8480;
-            readBuffer <= 24'h989680;
+            blindBuffer <= 24'h2625A0;
+            readBuffer <= 24'hBEBC20;
             ProcessIncomingData;
         end
         else if(read)begin
@@ -102,8 +108,8 @@ module Data (
             if(dataInReady)begin
                 readDataIn <= 0;
                 getDataFromZybo <= 1;
-                blindBuffer <= 24'h1E8480;
-                readBuffer <= 24'h989680;
+                blindBuffer <= 24'h2625A0;
+                readBuffer <= 24'hBEBC20;
                 ProcessIncomingData;
             end
 

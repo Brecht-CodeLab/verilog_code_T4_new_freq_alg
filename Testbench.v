@@ -142,7 +142,7 @@ module toplevel ();
 					measure <= getMeanCurrentData;
 					if(dutyUpDownDataReady)begin
 						case (dutyUpDownData)
-							1'b0:begin
+							1'b1:begin
 								if((l+l/10)<12'h1F4)begin
 									l <= l+(l/10);
 								end
@@ -150,7 +150,7 @@ module toplevel ();
 									l <= 12'h1F4;
 								end
 							end
-							1'b1:begin
+							1'b0:begin
 								if((l-l/10)>12'h32)begin
 									l <= l-(l/10);
 								end
@@ -158,6 +158,7 @@ module toplevel ();
 									l <= 12'h32;
 								end
 							end
+							default:l<=l;
 						endcase
 					end
 				end

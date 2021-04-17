@@ -25,6 +25,7 @@ module AnalyseData (
         dataStreamIn = 36'h0;
         sumChecker = 8'h0;
         checkSumBit = 0;
+        dataInReady = 0;
     end
     
     `include "taskAnalyseData.v"
@@ -37,6 +38,7 @@ module AnalyseData (
             dataStreamIn <= 36'h0;
             sumChecker <= 8'h0;
             checkSumBit <= 0;
+            dataInReady <= 0;
         end
         else if(startReadOut && counter == 0)begin
             dataStreamIn <= {dataStreamIn << 1} + din;

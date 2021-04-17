@@ -63,7 +63,7 @@ module Data (
         if(~nrst || ~swiptAlive || program != 2'b11)begin
             mode <= 2'b00;
             type <= 2'b00;
-            getDataFromZybo <= 0;
+            getDataFromZybo <= 1;
             write <= 0;
             read <= 0;
             streamCounter <= 8'h23;

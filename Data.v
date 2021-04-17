@@ -73,7 +73,6 @@ module Data (
         else if(getDataFromZybo) begin
             readDataIn <= 0;
             l_rdy <= 0;
-            write <= 1;
             read <= 0;
             streamCounter <= 8'h23;
             GetDataFromZybo;

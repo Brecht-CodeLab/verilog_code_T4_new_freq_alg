@@ -33,9 +33,9 @@ module Data (
     reg [1:0] mode, type;
     reg [7:0]streamCounter;
     reg [15:0] dataFromZybo;
-	reg [19:0] writeBuffer, blindBuffer, meanCurrentBuffer;
+	reg [19:0] writeBuffer, meanCurrentBuffer;
     reg [19:0] writeBuffer_default = 20'h30D40;
-	reg [23:0] readBuffer; //2 500 000 clk cycli == 25ms wait time for answer
+	reg [23:0] readBuffer, blindBuffer; //2 500 000 clk cycli == 25ms wait time for answer
     reg [35:0] dataStream;
 
     `include "protocols.v"
@@ -52,7 +52,7 @@ module Data (
         dout = 0;
         writeBuffer = 20'h30D40;
         readBuffer = 24'h989680;
-        blindBuffer = 20'hF4240;
+        blindBuffer = 24'h1E8480;
         meanCurrentBuffer = 20'hF4240;
         readDataIn = 0;
         GetDataFromZybo;
@@ -69,6 +69,7 @@ module Data (
             streamCounter <= 8'h23;
             getMeanCurrent <= 0;
             dout <= 0;
+            blindBuffer <= 24'h1E8480;
         end
         else if(getDataFromZybo) begin
             readDataIn <= 0;
@@ -91,7 +92,7 @@ module Data (
         else if(read && readBuffer == 0)begin
             readDataIn <= 0;
             getDataFromZybo <= 1;
-            blindBuffer <= 20'hF4240;
+            blindBuffer <= 24'h1E8480;
             readBuffer <= 24'h989680;
             ProcessIncomingData;
         end
@@ -101,7 +102,7 @@ module Data (
             if(dataInReady)begin
                 readDataIn <= 0;
                 getDataFromZybo <= 1;
-                blindBuffer <= 20'hF4240;
+                blindBuffer <= 24'h1E8480;
                 readBuffer <= 24'h989680;
                 ProcessIncomingData;
             end

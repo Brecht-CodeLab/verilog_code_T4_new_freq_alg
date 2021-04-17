@@ -79,7 +79,7 @@ module Data (
             GetDataFromZybo;
         end
         else if(write && writeBuffer == 0)begin
-            dataStream <= {6'b101010, mode, type, dataFromZybo, ^dataFromZybo, 4'b0101};
+            dataStream <= {6'b101010, ~mode[1], mode[1], ~mode[0], mode[0], ~type[1], type[1], ~type[0], type[0], dataFromZybo, ~^dataFromZybo, ^dataFromZybo, 4'b0101};
             dout <= dataStream[streamCounter];
             writeBuffer <= writeBuffer_default;
             getMeanCurrent <= 0;

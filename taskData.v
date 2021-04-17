@@ -47,15 +47,19 @@ task GetDataFromZybo;
     if(meanCurrentBuffer == 0 && getMeanCurrent)begin
         meanCurrentBuffer <= 20'hF4240;
         getMeanCurrent <= 0;
-        getDataFromZybo <= 0;
+        getDataFromZybo <= 1;
+        write <= 0;
     end
     else if(getMeanCurrent) begin
         meanCurrentBuffer <= meanCurrentBuffer - 1;
         getMeanCurrent <= 1;
+        getDataFromZybo <= 1;
+        write <= 0;
     end
     else begin
         getDataFromZybo <= 0;
         getMeanCurrent <= 0;
+        write <= 1;
         case (mode)
             2'b00:dataFromZybo <= 16'b1010101010101010;
             2'b01:begin

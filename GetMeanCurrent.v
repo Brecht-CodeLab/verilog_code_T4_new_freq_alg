@@ -33,6 +33,7 @@ module GetMeanCurrent (
 		else begin
 			highest <= 11'h0;
 			mean_curr_reg <= 11'h0;
+			numberMeasurements <= 0;
 		end
 	end
 endmodule
